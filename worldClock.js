@@ -13,6 +13,7 @@ function lagosData(){
       lagosTime.appendChild(h3)
       let hour = lagtime.slice(0,2)
       setHourAngle(hour, lagosHour)
+      rotateHoursHand(lagosHour)
    }
     else{
 	  const errorMessage =document.createElement('marquee')
@@ -62,6 +63,7 @@ function texasData(){
       texasTime.appendChild(h3)
       let hour = time.slice(0,2) 
       setHourAngle(hour, texasHour)
+      rotateHoursHand(texasHour)
     }
     else{
 	const errorMessage =document.createElement('marquee')
@@ -86,6 +88,7 @@ function parisData(){
       parisTime.appendChild(h3)
       let hour = time.slice(0,2)
       setHourAngle(hour, parisHour)
+      rotateHoursHand(parisHour)
    }
     else{
 	  const errorMessage =document.createElement('marquee')
