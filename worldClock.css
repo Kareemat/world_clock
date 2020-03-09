@@ -52,7 +52,7 @@ background-size: cover;
    margin: -5px 0px 0px -5px;
  }
 
- .minutes{
+ .hours{
 	position: absolute;
  	/*border: 1px solid black; */
  	transform-origin: 100% 50%; 
@@ -62,14 +62,14 @@ background-size: cover;
  	left: -7px;
  	top: 50%;
  }
- .minutesBox{
+ .hoursBox{
    position: absolute;
    background: white;
    height: 4px;
    width: 15px;
    top: -2px;
  }
- .hours{
+ .minutes{
 	position: absolute;
  /*	border: 1px solid black;*/
  	transform-origin: 50% 50% ; 
@@ -79,7 +79,7 @@ background-size: cover;
  	left: -50px;
  	top: 50%;
  }
- .hoursBox{
+ .minutesBox{
    position: absolute;
    background: black;
    height: 4px;
