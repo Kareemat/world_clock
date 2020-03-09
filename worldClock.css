@@ -1,0 +1,87 @@
+body {
+  background-image:linear-gradient(rgba(36,70,105,.74), rgba(36,70,105,.74)), url("C:/Users/Fasasi/Downloads/Snowmountain.jpg");
+background-repeat: no-repeat;
+background-size: cover;
+}
+ #outerLagos,
+ #outerLondon,
+ #outerTexas,
+ #outerParis{
+   left:40%;
+   background: grey;
+   border-radius: 50%;
+   height: 200px;
+   width: 200px;
+   position: relative;
+   border: 10px solid rgba(36,70,105,.74);
+ }
+ #innerLagos,
+ #innerLondon,
+ #innerTexas,
+ #innerParis{
+   position: absolute;
+   background: grey;
+   border-radius: 50%;
+   height: 100px;
+   width: 100px;
+   top: 50%;
+   left: 50%;
+   border:1px solid white;
+   margin: -50px 0px 0px -50px;
+   text-align: center;
+ }
+ .seconds{
+ 	position: absolute;
+ /*	border: 1px solid black;*/ 
+ 	transform-origin: 100% 50% ; 
+ 	transform: rotate(90deg);
+ 	width: 70px;
+ 	height: 0;
+ 	top: 50%;
+ 	left: -25px;
+ }
+ .secondsCircle{
+   position: absolute;
+   background: darkgray;
+   border-radius: 50%;
+   height: 10px;
+   width: 10px;
+   top: 50%;
+   left: 10%;
+   margin: -5px 0px 0px -5px;
+ }
+
+ .minutes{
+	position: absolute;
+ 	/*border: 1px solid black; */
+ 	transform-origin: 100% 50%; 
+ 	transform: rotate(40deg);
+ 	width: 57px;
+ 	height: 0;
+ 	left: -7px;
+ 	top: 50%;
+ }
+ .minutesBox{
+   position: absolute;
+   background: white;
+   height: 4px;
+   width: 15px;
+   top: -2px;
+ }
+ .hours{
+	position: absolute;
+ /*	border: 1px solid black;*/
+ 	transform-origin: 50% 50% ; 
+ 	transform: rotate(180deg);
+ 	width: 200px;
+ 	height:0;
+ 	left: -50px;
+ 	top: 50%;
+ }
+ .hoursBox{
+   position: absolute;
+   background: black;
+   height: 4px;
+   width: 10px;
+   top: 50%;
+ }
