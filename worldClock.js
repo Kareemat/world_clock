@@ -130,18 +130,10 @@ function rotateMinutesHand(id){
      }
    }
 }
-function rotateHoursHand(id){
-  let hoursDegree = $(id).css("-webkit-transform")
-  if(hoursDegree !== 'none'){
-   let values = hoursDegree.split('(')[1].split(')')[0].split(',');
-   let a = values[0];
-   let b = values[1];
-   let angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
-   angle += (1/2)
-   $(id).css({
-     '-webkit-transform' :'rotate('+angle+'deg)'
-   })
-  }
+function rotateHoursHand(id,timeId){
+   let locationTime = document.getElementById(timeId).innerHTML;
+   let hour = locationTime.slice(0,2)
+   setHourAngle(hour,id)
 }
 function setHourAngle(hour, id){
      if(hour == "01" || hour == "13"){
@@ -364,51 +356,73 @@ function setMinutesAndSecondsAngle(value, id){
   }
 }
 function updateTime(id){
-  let locationTime = document.getElementById(id).innerHTML;
-  let minuteTime = locationTime.slice(3,5)
-  let hourTime = locationTime.slice(0,2) 
-  let minuteTimeInt = parseInt(minuteTime)
-  let hourTimeInt = parseInt(hourTime)
+  let secondsDegree = $(".seconds").css("-webkit-transform")
+  let values = secondsDegree.split('(')[1].split(')')[0].split(',');
+  let a = values[0];
+  let b = values[1];
+  let secondsAngle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+  if (secondsAngle == 90){
+    let locationTime = document.getElementById(id).innerHTML;
+    let minuteTime = locationTime.slice(3,5)
+    let hourTime = locationTime.slice(0,2) 
+    let minuteTimeInt = parseInt(minuteTime)
+    let hourTimeInt = parseInt(hourTime)
     if(minuteTimeInt <= 58){
-      minuteTimeInt += 1
-     appendLeadingZeroes(minuteTimeInt)
-     let updatedTime = hourTime+":"+ minuteTimeInt
+     minuteTimeInt += 1
+     minuteTimeInt = appendLeadingZeroes(minuteTimeInt)
+     let updatedTime = hourTime+":"+minuteTimeInt
      document.getElementById(id).innerHTML = updatedTime
     }
     else{
+     if(hourTimeInt <=22){
       minuteTimeInt = 0
-      appendLeadingZeroes(minuteTimeInt)
+      minuteTimeInt = appendLeadingZeroes(minuteTimeInt)
       hourTimeInt += 1
-      appendLeadingZeroes(hourTimeInt)
+      hourTimeInt = appendLeadingZeroes(hourTimeInt)
+      let updatedTime = hourTimeInt+":"+ minuteTimeInt 
+      document.getElementById(id).innerHTML = updatedTime
+     }
+     else{
+      minuteTimeInt = 0
+      minutetimeInt = appendLeadingZeroes(minuteTimeInt)
+      hourTimeInt = 0
+      hourTimeInt = appendLeadingZeroes(hourTimeInt)
       let updatedTime = hourTimeInt+":"+ minuteTimeInt
       document.getElementById(id).innerHTML = updatedTime
+     }
     }
+  }
+}
+function hoursHand(){
+     rotateHoursHand("#lagosHour","lagosTime")
+     rotateHoursHand("#londonHour","lonTime")
+     rotateHoursHand("#texasHour","texTime")
+     rotateHoursHand("#parisHour","parTime")
 }
 function updateClocks(){
-     updateTime("lagosTime")
-     updateTime("lonTime")
-     updateTime("texTime")
-     updateTime("parTime")
-     rotateMinutesHand("#lagosMinutes")
-     rotateMinutesHand("#londonMinutes")
-     rotateMinutesHand("#texasMinutes")
-     rotateMinutesHand("#parisMinutes")
-     rotateHoursHand("#lagosMinutes")
-     rotateHoursHand("#londonMinutes")
-     rotateHoursHand("#texasMinutes")
-     rotateHoursHand("#parisMinutes")
+   rotateMinutesHand("#lagosMinutes")
+   rotateMinutesHand("#londonMinutes")
+   rotateMinutesHand("#texasMinutes")
+   rotateMinutesHand("#parisMinutes")
+   updateTime("lagosTime")
+   updateTime("lonTime")
+   updateTime("texTime")
+   updateTime("parTime")
 }
 function appendLeadingZeroes(n){ 
       if(n <= 9){
         return "0" + n;
       }
-      return n;
+      else{
+        return n;
+      }
 }
 $(document).ready(function(){
 	lagosData()
 	londonData()
 	texasData()
 	parisData()
+  setInterval(updateClocks,1000)
 	setInterval(rotateSecondsHand,1000)
-  setInterval(updateClocks,60000)
+  setInterval(hoursHand,60000)
 })
