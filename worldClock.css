@@ -4,10 +4,7 @@ background-repeat: no-repeat;
 background-size: cover;
 }
 
- #outerLagos,
- #outerLondon,
- #outerTexas,
- #outerParis{
+ .outerCircle{
    left:40%;
    background: grey;
    border-radius: 50%;
@@ -16,10 +13,7 @@ background-size: cover;
    position: relative;
    border: 10px solid rgba(36,70,105,.74);
  }
- #innerLagos,
- #innerLondon,
- #innerTexas,
- #innerParis{
+ .innerCircle{
    position: absolute;
    background: grey;
    border-radius: 50%;

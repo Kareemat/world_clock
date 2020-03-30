@@ -7,50 +7,12 @@
 	   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 <body>
-  <div id="outerLagos">
-     <div id="innerLagos">
-     	<div class="seconds" id="lagosSeconds"><div class="secondsCircle"></div></div>
-     	<div class="hours" id="lagosHour"><div class="hoursBox"></div></div>
-     	<div class="minutes" id="lagosMinutes"><div class="minutesBox"></div></div>
-     	<div id="lagosText">
-     	  <h4>Lagos</h4>
-     	  <h3 id="lagosTime"></h3>
-     	</div>
-     </div>
-  </div>&nbsp;&nbsp;&nbsp;
-  <div id="outerLondon">
-     <div id="innerLondon">
-     	<div class="seconds" id="londonSeconds"><div class="secondsCircle"></div></div>
-     	<div class="hours" id="londonHour"><div class="hoursBox"></div></div>
-     	<div class="minutes" id="londonMinutes"><div class="minutesBox"></div></div>
-		<div id="londonText">
-     	  <h4>London</h4>
-     	  <h3 id="lonTime"></h3>
-     	</div>     	
-     </div>
-  </div>&nbsp;&nbsp;&nbsp;
-  <div id="outerTexas">
-     <div id="innerTexas">
-     	<div class="seconds" id="texasSeconds"><div class="secondsCircle"></div></div>
-     	<div class="hours" id="texasHour"><div class="hoursBox"></div></div>
-     	<div class="minutes" id="texasMinutes"><div class="minutesBox"></div></div>
-     	<div id="texasText">
-     	  <h4>Texas</h4>
-     	  <h3 id="texTime"></h3>
-     	</div>
-     </div>
-  </div>&nbsp;&nbsp;&nbsp;
-  <div id="outerParis"><div class="six"></div>
-     <div id="innerParis">
-     	<div class="seconds" id="parisSeconds"><div class="secondsCircle"></div></div>
-     	<div class="hours" id="parisHour"><div class="hoursBox"></div></div>
-     	<div class="minutes" id="parisMinutes"><div class="minutesBox"></div></div>
-     	<div id="parisText">
-     	  <h4>Paris</h4>
-     	  <h3 id="parTime"></h3>
-     	</div>
-     </div>
-  </div>
+  <input id="search" type="text" placeholder="Clock Timezone" onkeyup="searchMatchingLocations()" disabled>
+  <button type="button" class="button" value="submit" onclick="addClock()">Add</button>
+  <button type="button" class="button" value="delete" onclick="empty()">Del</button>
+  <br>
+  <select id="match" onclick="selectLocation()"></select>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="worldClock.js"></script>

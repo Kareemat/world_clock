@@ -1,178 +1,143 @@
-//REQUEST FOR LAGOS TIME
-function lagosData(){
-  let request1 = new XMLHttpRequest()
-  setInterval(request1.open('GET', 'http://worldtimeapi.org/api/timezone/Africa/Lagos', true),1000)
-  request1.onload = function(){
+let locations;
+$(document).ready(function(){ 
+let request = new XMLHttpRequest()
+  request.open('GET', 'http://worldtimeapi.org/api/timezone', true)
+  request.onload = function(){
     let data = JSON.parse(this.response)
-   if (request1.status >= 200 && request1.status < 400 && this.readyState ==4){
-      let datetime =data.datetime;
-      let lagtime = datetime.slice(11,16);
-      document.getElementById('lagosTime').innerHTML = lagtime
-      let hour = lagtime.slice(0,2)
-      let value = lagtime.slice(3,5)
-      let second = datetime.slice(17,19)
-      setHourAngle(hour, lagosHour)
-      setMinutesAndSecondsAngle(value,lagosMinutes)
-      setMinutesAndSecondsAngle(second, lagosSeconds)
-   }
-    else{
-	  const errorMessage =document.createElement('marquee')
-      errorMessage.textContent = `Oh No, it's not working!`
-      app.appendChild(errorMessage)
+    if (request.status >= 200 && request.status < 400 && this.readyState ==4){
+      locations = data
+      $('#search').attr('disabled',false);
+      return locations;
     }
-  }  
-  request1.send()
-}
-//REQUEST FOR LONDON TIME
-function londonData(){
-  let request2 = new XMLHttpRequest()
-  request2.open('GET', 'http://worldtimeapi.org/api/timezone/Europe/London', true)
-  request2.onload = function(){
-    let data = JSON.parse(this.response)
-   if (request2.status >= 200 && request2.status < 400 && this.readyState ==4){
-     let datetime =data.datetime;
-     let time = datetime.slice(11,16);
-     document.getElementById('lonTime').innerHTML =time
-     let hour = time.slice(0,2)
-     let value = time.slice(3,5)
-     let second = datetime.slice(17,19)
-     setHourAngle(hour, londonHour)
-     setMinutesAndSecondsAngle(value,londonMinutes)
-     setMinutesAndSecondsAngle(second, londonSeconds)
-   }
-    else{
-	  const errorMessage =document.createElement('marquee')
-      errorMessage.textContent = `Oh No, it's not working!`
-      body.appendChild(errorMessage)
-    }
-  }  
-  request2.send()
-}
-//REQUEST FOR TEXAS TIME
-function texasData(){
-  let request3 = new XMLHttpRequest()
-  request3.open('GET', 'http://worldtimeapi.org/api/timezone/America/Chicago', true)
-  request3.onload = function(){
-    let data = JSON.parse(this.response)
-    if (request3.status >= 200 && request3.status < 400 && this.readyState ==4){
-      let datetime =data.datetime;
-      let time = datetime.slice(11,16);
-      document.getElementById('texTime').innerHTML = time
-      let hour = time.slice(0,2)
-      let value = time.slice(3,5) 
-      let second = datetime.slice(17,19)
-      setHourAngle(hour, texasHour)
-      setMinutesAndSecondsAngle(value,texasMinutes)
-      setMinutesAndSecondsAngle(second, texasSeconds)
-    }
-    else{
-	const errorMessage =document.createElement('marquee')
-    errorMessage.textContent = `Oh No, it's not working!`
-    body.appendChild(errorMessage)
-    }
-  }  
-  request3.send()
-}
-// REQUEST FOR PARIS TIME
-function parisData(){
-  let request4 = new XMLHttpRequest()
-  request4.open('GET', 'http://worldtimeapi.org/api/timezone/Europe/Paris', true)
-  request4.onload = function(){
-    let data = JSON.parse(this.response)
-   if (request4.status >= 200 && request4.status < 400 && this.readyState ==4){
-      let datetime =data.datetime;
-      let time = datetime.slice(11,16);
-      document.getElementById('parTime').innerHTML =time
-      let hour = time.slice(0,2)
-      let value = time.slice(3,5)
-      let second = datetime.slice(17,19)
-      setHourAngle(hour, parisHour)
-      setMinutesAndSecondsAngle(value,parisMinutes)
-      setMinutesAndSecondsAngle(second, parisSeconds)
-   }
-    else{
-	  const errorMessage =document.createElement('marquee')
-      errorMessage.textContent = `Oh No, it's not working!`
-      body.appendChild(errorMessage)
-    }
-  }  
-  request4.send()
-}
-function rotateSecondsHand(){
-   let secondsDegree = $(".seconds").css("-webkit-transform")
-   let values = secondsDegree.split('(')[1].split(')')[0].split(',');
-   let a = values[0];
-   let b = values[1];
-   let secondsAngle = Math.round(Math.atan2(b, a) * (180/Math.PI));
-   secondsAngle += 6
-   $(".seconds").css({
-     '-webkit-transform' :'rotate('+secondsAngle+'deg)'
-   })
-   return secondsAngle;
-}
-function rotateMinutesHand(id){
-   let secondsDegree = $(".seconds").css("-webkit-transform")
-   let values = secondsDegree.split('(')[1].split(')')[0].split(',');
-   let a = values[0];
-   let b = values[1];
-   let secondsAngle = Math.round(Math.atan2(b, a) * (180/Math.PI));
-   if (secondsAngle == 90){
-     let minutesDegree = $(id).css("-webkit-transform")
-     if(minutesDegree !== 'none'){
-       let values = minutesDegree.split('(')[1].split(')')[0].split(',');
-       let a = values[0];
-       let b = values[1];
-       let angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
-       angle += 6
-       $(id).css({
-       '-webkit-transform' :'rotate('+angle+'deg)'
-       })
+  }
+  request.send()
+}); 
+function searchMatchingLocations(){
+  document.getElementById('match').innerHTML=""
+  let insertedLocation = document.getElementById("search").value
+  for (let i = 0; i < locations.length; i++){
+    if ((locations[i].toLowerCase()).includes(insertedLocation.toLowerCase())){
+      let sel = document.getElementById('match');
+      let opt = document.createElement('option');
+      opt.appendChild(document.createTextNode(locations[i]));
+      sel.appendChild(opt); 
      }
-   }
+  }
 }
-function rotateHoursHand(id,timeId){
-   let locationTime = document.getElementById(timeId).innerHTML;
-   let hour = locationTime.slice(0,2)
-   setHourAngle(hour,id)
+function selectLocation(){
+  let selectedLocation = document.getElementById("match").value
+  document.getElementById('search').value = selectedLocation
+}
+function empty(){
+  document.getElementById('search').value =""
+}
+function addClock(){
+ let clockZone = document.getElementById('search').value
+ createClocks(clockZone)
+ document.getElementById('search').value =""
+}
+function createClocks(place){ 
+  $.ajax(('http://worldtimeapi.org/api/timezone/'+ place),
+    {
+      dataType: 'json',
+      success: function (data, status, xhr){
+      let locationTime = data.datetime.slice(11,16);
+      let hour = locationTime.slice(0,2)
+      let value = locationTime.slice(3,5)
+      let second = data.datetime.slice(17,19)
+      let zone = data.timezone.slice(7,12)
+      let locationNameHolder = document.createElement("h6")
+      let locationTimeHolder =document.createElement("h3")
+      locationNameHolder.innerHTML =place
+      locationTimeHolder.innerHTML =locationTime
+      locationTimeHolder.id = zone + "Time"
+      locationTimeHolder_id = locationTimeHolder.id
+      let locationContent = document.createElement("div")
+      locationContent.appendChild(locationNameHolder)
+      locationContent.appendChild(locationTimeHolder)
+      let minutes = document.createElement("div")
+      let minutesBox = document.createElement("div")
+      minutes.appendChild(minutesBox)
+      let hours = document.createElement("div")
+      let hoursBox = document.createElement("div")
+      hours.appendChild(hoursBox)
+      let seconds = document.createElement("div")
+      let secondsCircle = document.createElement("div")
+      seconds.appendChild(secondsCircle)
+      let innerCircle = document.createElement("div")
+      innerCircle.appendChild(seconds)
+      innerCircle.appendChild(hours)
+      innerCircle.appendChild(minutes)
+      innerCircle.appendChild(locationContent)
+      let outerCircle = document.createElement("div")
+      outerCircle.appendChild(innerCircle)
+      document.body.appendChild(outerCircle)
+      outerCircle.className ="outerCircle"
+      innerCircle.className ="innerCircle"
+      secondsCircle.className ="secondsCircle"
+      hoursBox.className = "hoursBox"
+      minutesBox.className ="minutesBox"
+      hours.className ="hours"
+      minutes.className = "minutes"
+      seconds.className ="seconds"
+      hours.id = zone + "Hour"
+      minutes.id = zone + "Minute"
+      seconds.id = zone + "Second"
+      let minute_id = minutes.id
+      let second_id = seconds.id
+      let hour_id = hours.id
+      setHourAngle(hour,"#"+hours.id)
+      setMinutesAndSecondsAngle(second,"#"+seconds.id)
+      setMinutesAndSecondsAngle(value,"#"+minutes.id)
+      function rotateHands(){
+        rotateMinutesHand(minute_id,second_id)
+        rotateSecondsHand(second_id)
+        updateTime(second_id,locationTimeHolder_id)
+      }
+      setInterval(rotateHands,1000)
+      setInterval((rotateMinutesHand(zone + "Minute")),1000)
+      setInterval((updateTime(zone + "Time")),1000)
+      } 
+    })
 }
 function setHourAngle(hour, id){
      if(hour == "01" || hour == "13"){
-     	 $(id).css({'-webkit-transform' :'rotate('+120+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+120+'deg)'})
      }
      else if(hour =="02" || hour == "14"){
-     	 $(id).css({'-webkit-transform' :'rotate('+150+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+150+'deg)'})
      }
      else if(hour =="03" || hour == "15"){
-     	 $(id).css({'-webkit-transform' :'rotate('+180+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+180+'deg)'})
      }
      else if(hour =="04" || hour == "16"){
-     	 $(id).css({'-webkit-transform' :'rotate('+210+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+210+'deg)'})
      }
      else if(hour =="05" || hour == "17"){
-     	 $(id).css({'-webkit-transform' :'rotate('+240+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+240+'deg)'})
      }
      else if(hour =="06" || hour == "18"){
-     	 $(id).css({'-webkit-transform' :'rotate('+270+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+270+'deg)'})
      }
      else if(hour =="07" || hour == "19"){
-     	 $(id).css({'-webkit-transform' :'rotate('+300+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+300+'deg)'})
      }
      else if(hour =="08" || hour == "20"){
-     	 $(id).css({'-webkit-transform' :'rotate('+330+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+330+'deg)'})
      }
      else if(hour =="09" || hour == "21"){
-     	 $(id).css({'-webkit-transform' :'rotate('+360+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+360+'deg)'})
      }
      else if(hour =="10" || hour == "22"){
-     	 $(id).css({'-webkit-transform' :'rotate('+30+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+30+'deg)'})
      }
      else if(hour =="11" || hour == "23"){
-     	 $(id).css({'-webkit-transform' :'rotate('+60+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+60+'deg)'})
      }
      else if(hour =="12" || hour == "24"){
-     	 $(id).css({'-webkit-transform' :'rotate('+90+'deg)'})
+       $(id).css({'-webkit-transform' :'rotate('+90+'deg)'})
      }
-} 
+}
 function setMinutesAndSecondsAngle(value, id){
   if(value == "00"){
        $(id).css({'-webkit-transform' :'rotate('+90+'deg)'})
@@ -355,14 +320,46 @@ function setMinutesAndSecondsAngle(value, id){
        $(id).css({'-webkit-transform' :'rotate('+84+'deg)'})
   }
 }
-function updateTime(id){
-  let secondsDegree = $(".seconds").css("-webkit-transform")
+function rotateSecondsHand(id){
+   let secondsDegree = $("#"+id).css("-webkit-transform")
+   let values = secondsDegree.split('(')[1].split(')')[0].split(',');
+   let a = values[0];
+   let b = values[1];
+   let secondsAngle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+   secondsAngle += 6
+   $("#"+id).css({
+     '-webkit-transform' :'rotate('+secondsAngle+'deg)'
+   })
+   return secondsAngle;
+}
+function rotateMinutesHand(minutesID, secondsID){
+   let secondsDegree = $("#"+secondsID).css("-webkit-transform")
+   let values = secondsDegree.split('(')[1].split(')')[0].split(',');
+   let a = values[0];
+   let b = values[1];
+   let secondsAngle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+   if (secondsAngle == 90){
+     let minutesDegree = $("#"+minutesID).css("-webkit-transform")
+     if(minutesDegree !== 'none'){
+       let values = minutesDegree.split('(')[1].split(')')[0].split(',');
+       let a = values[0];
+       let b = values[1];
+       let angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+       angle += 6
+       $("#"+minutesID).css({
+       '-webkit-transform' :'rotate('+angle+'deg)'
+       })
+     }
+   }
+}
+function updateTime(secondsID,timeID){
+  let secondsDegree = $("#"+secondsID).css("-webkit-transform")
   let values = secondsDegree.split('(')[1].split(')')[0].split(',');
   let a = values[0];
   let b = values[1];
   let secondsAngle = Math.round(Math.atan2(b, a) * (180/Math.PI));
   if (secondsAngle == 90){
-    let locationTime = document.getElementById(id).innerHTML;
+    let locationTime = document.getElementById(timeID).innerHTML;
     let minuteTime = locationTime.slice(3,5)
     let hourTime = locationTime.slice(0,2) 
     let minuteTimeInt = parseInt(minuteTime)
@@ -371,7 +368,7 @@ function updateTime(id){
      minuteTimeInt += 1
      minuteTimeInt = appendLeadingZeroes(minuteTimeInt)
      let updatedTime = hourTime+":"+minuteTimeInt
-     document.getElementById(id).innerHTML = updatedTime
+     document.getElementById(timeID).innerHTML = updatedTime
     }
     else{
      if(hourTimeInt <=22){
@@ -380,7 +377,7 @@ function updateTime(id){
       hourTimeInt += 1
       hourTimeInt = appendLeadingZeroes(hourTimeInt)
       let updatedTime = hourTimeInt+":"+ minuteTimeInt 
-      document.getElementById(id).innerHTML = updatedTime
+      document.getElementById(timeID).innerHTML = updatedTime
      }
      else{
       minuteTimeInt = 0
@@ -388,26 +385,10 @@ function updateTime(id){
       hourTimeInt = 0
       hourTimeInt = appendLeadingZeroes(hourTimeInt)
       let updatedTime = hourTimeInt+":"+ minuteTimeInt
-      document.getElementById(id).innerHTML = updatedTime
+      document.getElementById(timeID).innerHTML = updatedTime
      }
     }
   }
-}
-function hoursHand(){
-     rotateHoursHand("#lagosHour","lagosTime")
-     rotateHoursHand("#londonHour","lonTime")
-     rotateHoursHand("#texasHour","texTime")
-     rotateHoursHand("#parisHour","parTime")
-}
-function updateClocks(){
-   rotateMinutesHand("#lagosMinutes")
-   rotateMinutesHand("#londonMinutes")
-   rotateMinutesHand("#texasMinutes")
-   rotateMinutesHand("#parisMinutes")
-   updateTime("lagosTime")
-   updateTime("lonTime")
-   updateTime("texTime")
-   updateTime("parTime")
 }
 function appendLeadingZeroes(n){ 
       if(n <= 9){
@@ -417,12 +398,4 @@ function appendLeadingZeroes(n){
         return n;
       }
 }
-$(document).ready(function(){
-	lagosData()
-	londonData()
-	texasData()
-	parisData()
-  setInterval(updateClocks,1000)
-	setInterval(rotateSecondsHand,1000)
-  setInterval(hoursHand,60000)
-})
+createClocks("Africa/Lagos")
