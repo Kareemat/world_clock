@@ -92,11 +92,10 @@ function createClocks(place){
       function rotateHands(){
         rotateMinutesHand(minute_id,second_id)
         rotateSecondsHand(second_id)
+        rotateHoursHand("#"+hours.id,locationTimeHolder_id)
         updateTime(second_id,locationTimeHolder_id)
       }
       setInterval(rotateHands,1000)
-      setInterval((rotateMinutesHand(zone + "Minute")),1000)
-      setInterval((updateTime(zone + "Time")),1000)
       } 
     })
 }
@@ -351,6 +350,11 @@ function rotateMinutesHand(minutesID, secondsID){
        })
      }
    }
+}
+function rotateHoursHand(id,timeID){
+   let locationTime = document.getElementById(timeID).innerHTML;
+   let hour = locationTime.slice(0,2)
+   setHourAngle(hour,id)
 }
 function updateTime(secondsID,timeID){
   let secondsDegree = $("#"+secondsID).css("-webkit-transform")
