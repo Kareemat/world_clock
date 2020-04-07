@@ -96,6 +96,11 @@ function createClocks(place){
         updateTime(second_id,locationTimeHolder_id)
       }
       setInterval(rotateHands,1000)
+<<<<<<< HEAD
+=======
+      setInterval(()=>{rotateMinutesHand(zone + "Minute",second_id)},1000)
+      setInterval((updateTime(second_id, zone + "Time")),1000)
+>>>>>>> a61b15ebc356f9700056449bd6f09f9923127f12
       } 
     })
 }
