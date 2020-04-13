@@ -1,6 +1,7 @@
+showClocks();
 let locations;
 $(document).ready(function(){ 
-let request = new XMLHttpRequest()
+ let request = new XMLHttpRequest()
   request.open('GET', 'http://worldtimeapi.org/api/timezone', true)
   request.onload = function(){
     let data = JSON.parse(this.response)
@@ -32,9 +33,18 @@ function empty(){
   document.getElementById('search').value =""
 }
 function addClock(){
- let clockZone = document.getElementById('search').value
- createClocks(clockZone)
- document.getElementById('search').value =""
+  let clocksData =retrieveClocks();
+  if(clocksData.length >= 4){
+    document.getElementById('search').value =""
+    $('#search').attr('disabled',true);
+  }
+  else{
+    let clockZone = document.getElementById('search').value
+    createClocks(clockZone)
+    clocksData.push(clockZone);
+    localStorage.setItem('clocksStorage', JSON.stringify(clocksData));
+    document.getElementById('search').value =""
+  }
 }
 function createClocks(place){ 
   $.ajax(('http://worldtimeapi.org/api/timezone/'+ place),
@@ -45,7 +55,7 @@ function createClocks(place){
       let hour = locationTime.slice(0,2)
       let value = locationTime.slice(3,5)
       let second = data.datetime.slice(17,19)
-      let zone = data.timezone.slice(7,12)
+      let zone = data.timezone.split('/').pop();
       let locationNameHolder = document.createElement("h6")
       let locationTimeHolder =document.createElement("h3")
       locationNameHolder.innerHTML =place
@@ -71,8 +81,16 @@ function createClocks(place){
       innerCircle.appendChild(locationContent)
       let outerCircle = document.createElement("div")
       outerCircle.appendChild(innerCircle)
+      var button = document.createElement("BUTTON");
+      var buttonText = document.createTextNode("X");
+      button.appendChild(buttonText);
+      button.className = "botton"
+      button.id = zone + "button"
+      button.onclick = function() {deleteClock(zone+"button")}
+      outerCircle.appendChild(button);
       document.body.appendChild(outerCircle)
       outerCircle.className ="outerCircle"
+      outerCircle.id= data.timezone
       innerCircle.className ="innerCircle"
       secondsCircle.className ="secondsCircle"
       hoursBox.className = "hoursBox"
@@ -86,59 +104,53 @@ function createClocks(place){
       let minute_id = minutes.id
       let second_id = seconds.id
       let hour_id = hours.id
-      setHourAngle(hour,"#"+hours.id)
+      setHourAngle(zone + "Time","#"+zone + "Hour")
       setMinutesAndSecondsAngle(second,"#"+seconds.id)
       setMinutesAndSecondsAngle(value,"#"+minutes.id)
-      function rotateHands(){
-        rotateMinutesHand(minute_id,second_id)
-        rotateSecondsHand(second_id)
-        rotateHoursHand("#"+hours.id,locationTimeHolder_id)
-        updateTime(second_id,locationTimeHolder_id)
-      }
-      setInterval(rotateHands,1000)
-<<<<<<< HEAD
-=======
+      setInterval(()=>{setHourAngle(zone + "Time","#"+zone + "Hour")},1000)
+      setInterval(()=>{rotateSecondsHand(second_id)},1000)
       setInterval(()=>{rotateMinutesHand(zone + "Minute",second_id)},1000)
-      setInterval((updateTime(second_id, zone + "Time")),1000)
->>>>>>> a61b15ebc356f9700056449bd6f09f9923127f12
+      setInterval(()=>{updateTime(second_id, zone + "Time")},1000)
       } 
     })
 }
-function setHourAngle(hour, id){
-     if(hour == "01" || hour == "13"){
+function setHourAngle(ID, id){
+  let time = document.getElementById(ID).innerHTML
+  let timeHour =time.slice(0,2)
+     if(timeHour == "01" || timeHour == "13"){
        $(id).css({'-webkit-transform' :'rotate('+120+'deg)'})
      }
-     else if(hour =="02" || hour == "14"){
+     else if(timeHour =="02" || timeHour == "14"){
        $(id).css({'-webkit-transform' :'rotate('+150+'deg)'})
      }
-     else if(hour =="03" || hour == "15"){
+     else if(timeHour =="03" || timeHour == "15"){
        $(id).css({'-webkit-transform' :'rotate('+180+'deg)'})
      }
-     else if(hour =="04" || hour == "16"){
+     else if(timeHour =="04" || timeHour == "16"){
        $(id).css({'-webkit-transform' :'rotate('+210+'deg)'})
      }
-     else if(hour =="05" || hour == "17"){
+     else if(timeHour =="05" || timeHour == "17"){
        $(id).css({'-webkit-transform' :'rotate('+240+'deg)'})
      }
-     else if(hour =="06" || hour == "18"){
+     else if(timeHour =="06" || timeHour == "18"){
        $(id).css({'-webkit-transform' :'rotate('+270+'deg)'})
      }
-     else if(hour =="07" || hour == "19"){
+     else if(timeHour =="07" || timeHour== "19"){
        $(id).css({'-webkit-transform' :'rotate('+300+'deg)'})
      }
-     else if(hour =="08" || hour == "20"){
+     else if(timeHour =="08" || timeHour== "20"){
        $(id).css({'-webkit-transform' :'rotate('+330+'deg)'})
      }
-     else if(hour =="09" || hour == "21"){
+     else if(timeHour=="09" || timeHour == "21"){
        $(id).css({'-webkit-transform' :'rotate('+360+'deg)'})
      }
-     else if(hour =="10" || hour == "22"){
+     else if(timeHour =="10" || timeHour == "22"){
        $(id).css({'-webkit-transform' :'rotate('+30+'deg)'})
      }
-     else if(hour =="11" || hour == "23"){
+     else if(timeHour =="11" || timeHour == "23"){
        $(id).css({'-webkit-transform' :'rotate('+60+'deg)'})
      }
-     else if(hour =="12" || hour == "24"){
+     else if(timeHour=="12" || timeHour == "00"){
        $(id).css({'-webkit-transform' :'rotate('+90+'deg)'})
      }
 }
@@ -356,11 +368,6 @@ function rotateMinutesHand(minutesID, secondsID){
      }
    }
 }
-function rotateHoursHand(id,timeID){
-   let locationTime = document.getElementById(timeID).innerHTML;
-   let hour = locationTime.slice(0,2)
-   setHourAngle(hour,id)
-}
 function updateTime(secondsID,timeID){
   let secondsDegree = $("#"+secondsID).css("-webkit-transform")
   let values = secondsDegree.split('(')[1].split(')')[0].split(',');
@@ -407,4 +414,30 @@ function appendLeadingZeroes(n){
         return n;
       }
 }
-createClocks("Africa/Lagos")
+function deleteClock(id){
+  let clock = document.getElementById(id).parentElement
+  let clockID = clock.id
+  let clocksData =retrieveClocks();
+  clocksData.splice(clocksData.indexOf(clockID), 1)
+  localStorage.setItem('clocksStorage', JSON.stringify(clocksData));
+  while (clock.firstChild){
+    clock.removeChild(clock.lastChild);
+  }
+  clock.remove()
+  location.reload(true);
+}
+function retrieveClocks(){
+  let clocksData =[];
+  let clocksList = localStorage.getItem('clocksStorage');
+  if(clocksList !=null){
+       clocksData =JSON.parse(clocksList);
+  }
+  return clocksData;
+};
+function showClocks(){
+  let clocks = retrieveClocks()
+  let i;
+  for(i=0; i< clocks.length; i++){
+    createClocks(clocks[i])
+  }
+};
